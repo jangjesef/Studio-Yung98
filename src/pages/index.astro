@@ -20,21 +20,6 @@
       h2[data-astro-cid-j7pv25f6] {
         color: #333;
       }
-      .photos[data-astro-cid-j7pv25f6] {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 20px 0;
-        justify-content: center;
-      }
-      .photos[data-astro-cid-j7pv25f6] img[data-astro-cid-j7pv25f6] {
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        object-fit: cover;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
       .music-player[data-astro-cid-j7pv25f6] {
         margin: 20px 0;
         width: 100%;
@@ -60,7 +45,8 @@
         border-radius: 5px;
         transition: background-color 0.3s;
       }
-      .button-container[data-astro-cid-j7pv25f6] a[data-astro-cid-j7pv25f6]:hover {
+      .button-container[data-astro-cid-j7pv25f6]
+        a[data-astro-cid-j7pv25f6]:hover {
         background-color: #0056b3;
       }
     </style>
@@ -72,13 +58,7 @@
       <a href="/blog/" data-astro-cid-j7pv25f6>Blog</a>
     </div>
 
-    <section class="photos" data-astro-cid-j7pv25f6>
-      <h2>Moje fotky</h2>
-      <!-- Dynamické načítání fotek -->
-      {% for image_path in image_paths %}
-        <img src="{{ image_path }}" alt="Fotka" data-astro-cid-j7pv25f6 />
-      {% endfor %}
-    </section>
+    <astro-include src="./components/Photos.astro"></astro-include>
 
     <section class="music-player" data-astro-cid-j7pv25f6>
       <h2>Přehrávač hudby</h2>
