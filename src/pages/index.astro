@@ -1,5 +1,45 @@
-<!doctype html>
-<html lang="en" data-astro-cid-j7pv25f6>
+---
+import React from "react";
+import ReactDOM from "react-dom/server";
+import Nav from "../components/nav";
+import PhotoGallery from "../components/PhotoGallery";
+import fs from "fs";
+import path from "path";
+
+// Function to read image paths from the directory
+const readImagePaths = () => {
+  const imgFolderPath = path.join(process.cwd(), "yung", "public", "img");
+
+  try {
+    const imageFiles = fs
+      .readdirSync(imgFolderPath)
+      .filter(
+        (file) =>
+          file.toLowerCase().endsWith(".jpg") ||
+          file.toLowerCase().endsWith(".jpeg") ||
+          file.toLowerCase().endsWith(".png")
+      );
+
+    const imagePaths = imageFiles.map((file) => `/img/${file}`);
+    return imagePaths;
+  } catch (err) {
+    console.error("Failed to load images:", err);
+    return [];
+  }
+};
+
+// Render React component to string
+const reactComponentString = ReactDOM.renderToString(<PhotoGallery />);
+
+// Provide initial props to the Astro component
+const props = {
+  reactComponentString,
+  imagePaths: readImagePaths(),
+};
+---
+
+<!-- pages/index.astro -->
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -52,14 +92,8 @@
     </style>
   </head>
   <body data-astro-cid-j7pv25f6>
-    <div class="button-container" data-astro-cid-j7pv25f6>
-      <a href="/" data-astro-cid-j7pv25f6>Home</a>
-      <a href="/about/" data-astro-cid-j7pv25f6>About</a>
-      <a href="/blog/" data-astro-cid-j7pv25f6>Blog</a>
-    </div>
-
-    <astro-include src="./components/Photos.astro"></astro-include>
-
+    <div id="photoGalleryContainer">${props.reactComponentString}</div>
+    <Nav />
     <section class="music-player" data-astro-cid-j7pv25f6>
       <h2>Přehrávač hudby</h2>
       <!-- Vložte hudební přehrávač níže -->
@@ -83,5 +117,44 @@
         obraze!
       </p>
     </section>
+
+    <script type="module">
+      import React from "react";
+      import ReactDOM from "react-dom";
+
+      const PhotoGallery = () => {
+        const [imagePaths, setImagePaths] = React.useState([]);
+
+        React.useEffect(() => {
+          const fetchImagePaths = async () => {
+            try {
+              const response = await fetch("/api/images"); // Replace with your server endpoint
+              const data = await response.json();
+              setImagePaths(data.imagePaths);
+            } catch (error) {
+              console.error("Failed to fetch image paths:", error);
+            }
+          };
+
+          fetchImagePaths();
+        }, []);
+
+        return (
+          <section className="photo-gallery">
+            <h2>Moje fotky</h2>
+            <div className="photos-container">
+              {imagePaths.map((imagePath, index) => (
+                <img key={index} src={imagePath} alt={`Fotka ${index + 1}`} />
+              ))}
+            </div>
+          </section>
+        );
+      };
+
+      ReactDOM.hydrate(
+        <PhotoGallery />,
+        document.getElementById("photoGalleryContainer")
+      );
+    </script>
   </body>
 </html>
