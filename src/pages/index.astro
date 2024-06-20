@@ -60,8 +60,7 @@
         border-radius: 5px;
         transition: background-color 0.3s;
       }
-      .button-container[data-astro-cid-j7pv25f6]
-        a[data-astro-cid-j7pv25f6]:hover {
+      .button-container[data-astro-cid-j7pv25f6] a[data-astro-cid-j7pv25f6]:hover {
         background-color: #0056b3;
       }
     </style>
@@ -75,12 +74,10 @@
 
     <section class="photos" data-astro-cid-j7pv25f6>
       <h2>Moje fotky</h2>
-      <!-- Přidejte své fotky níže -->
-      <img src="/img/DSCF6122.jpg" alt="Fotka 1" data-astro-cid-j7pv25f6 />
-      <img src="/img/DSCF6121.jpg" alt="Fotka 2" data-astro-cid-j7pv25f6 />
-      <img src="/img/DSCF6114.jpg" alt="Fotka 3" data-astro-cid-j7pv25f6 />
-      <img src="/img/DSCF6086.jpg" alt="Fotka 4" data-astro-cid-j7pv25f6 />
-      <!-- Pokračujte přidáváním dalších fotek -->
+      <!-- Dynamické načítání fotek -->
+      {% for image_path in image_paths %}
+        <img src="{{ image_path }}" alt="Fotka" data-astro-cid-j7pv25f6 />
+      {% endfor %}
     </section>
 
     <section class="music-player" data-astro-cid-j7pv25f6>
